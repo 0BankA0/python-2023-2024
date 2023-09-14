@@ -17,8 +17,8 @@ class info():
         self.modelis = modelis
         self.cena = cena
     def save(self):
-        with open('info.txt','W', encoding="utf=8") as fails:
-            fails.write("-personala datora sastavdala-\n")
+        with open('info.txt','w', encoding="utf=8") as fails:
+            fails.write("-Personālā datora sastāvdaļa-\n")
             fails.write(f"Veids: {self.veids}\n")
             fails.write(f"modelis: {self.modelis}\n")
             fails.write(f"Cena: {self.cena} EUR\n")
@@ -30,19 +30,33 @@ jauns.save()
 
 psg.theme('darkamber')
 layout = [
-            [psg.Text('Komponentes')]
-            [psg.Text('Veids')]
-          
+            [psg.Text('Komponentes')],
+            [psg.Text('Veids'),psg.InputText()],
+            [psg.Text('Modelis'),psg.InputText()],
+            [psg.Text('Cena'),psg.InputText()]
           ]
 
-layout2 = [[psg.Text('Redigešana')]]
+layout2 = [[psg.Text('Redigēšana')]]
 
-tabgrp = [
+tabgrp = [[
     psg.TabGroup(
         [
             [
-                psg.Tab('Datu ievade')
+                psg.Tab('Datu ievade', layout),
+                psg.Tab('Datu redigēšana', layout2)
+            
             ]
         ]
-    )
-]
+    ),
+    psg.Button('Aizvērt')
+]]
+
+window = psg.Window('Datora komponentes', tabgrp)
+
+while True:
+    event,values = window.read() #Nolasa ievadītās vērtības un darbības
+    #Apgalvojumi
+    if event in (psg.WIN_CLOSED,'Aizvērt'):
+        break
+
+window.close()
