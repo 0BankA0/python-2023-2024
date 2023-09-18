@@ -16,13 +16,12 @@ class info():
         self.veids = veids
         self.modelis = modelis
         self.cena = cena
-        with open('info.txt',encoding="utf=8") as file:
-            lines = file.readline()
+
     
     
     
     def save(self):
-        with open('info.txt','a', encoding="utf=8") as fails:
+        with open('info.txt','w', encoding="utf=8") as fails:
             fails.write("-Personālā datora sastāvdaļa-\n")
             fails.write(f"Veids: {self.veids}\n")
             fails.write(f"modelis: {self.modelis}\n")
@@ -41,8 +40,11 @@ layout = [
 
 layout2 = [
     
-        [psg.Text('Redigēšana')]
-        
+        [psg.Text('Redigēšana')],
+        [psg.Text('Veids'),psg.InputText()],
+        [psg.Text('Modelis'),psg.InputText()],
+        [psg.Text('Cena'),psg.InputText()],
+        [psg.Button('Rediģēt')]        
 
     
     
@@ -69,12 +71,22 @@ while True:
     event,values = window.read() #Nolasa ievadītās vērtības un darbības
     #Apgalvojumi
     if event in (psg.WIN_CLOSED,'Aizvērt'):
+    
         break
-    elif event in (psg, 'submit'):
+
+
+    
+    if event in (psg, 'submit'):
         jauns = info(values[0],values[1],values[2])
         jauns.apskate()
         jauns.save()
-        break
         
+    
+    if event == "Rediģēt":
+        veids = values[0]
+        modelis = values[1]
+        cena = values[2]
+        jauns.laboshana(veids,modelis,cena)
+        jauns.save()
 
 window.close()

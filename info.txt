@@ -1,4 +1,4 @@
 -Personālā datora sastāvdaļa-
-Veids: RAM
-modelis: Corsair Vengeance LPX 16GB
-Cena: 99,99 EUR
+Veids: qwe
+modelis: qwe
+Cena: 123 EUR
