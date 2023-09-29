@@ -24,7 +24,16 @@ class Remontdarbnica():
             fails.write(f'{self.remontdarbu_sakuma_datums}\n')
             fails.write(f'{self.remontdarbu_beigu_datums}\n')
     def Remontdarbu_info_print(self):
-        pass
+        print(self.klienta_vards)
+        print(self.klienta_uzvards)
+        print(self.telefona_numurs)
+        print(f'{self.remontdarbu_cena} EUR')
+        print(self.telefona_modelis)
+        print(self.Telefonam_peiskirtais_numurs)
+        print(self.remontdarbu_sakuma_datums)
+        print(self.remontdarbu_beigu_datums)
+
+
 
 ps.theme('Black')
 
@@ -62,7 +71,27 @@ while True:
         remontdarbu_beigu_datums = values[7]
         save = Remontdarbnica(klienta_vards, klienta_uzvards, telefona_numurs, remontdarbu_cena, telefona_modelis, Telefonam_peiskirtais_numurs, remontdarbu_sakuma_datums, remontdarbu_beigu_datums)
         save.Remontdarbu_info()
+        save.Remontdarbu_info_print()
     if event == 'Apskatīt datus':
-        pass    
+        ps.theme("Black")
+        layout = [
+                    [ps.Text("Apskatīt datus")],
+                    [ps.Text(klienta_vards)],
+                    [ps.Text(klienta_uzvards)],
+                    [ps.Text(telefona_numurs)],
+                    [ps.Text(remontdarbu_cena)],
+                    [ps.Text(telefona_modelis)],
+                    [ps.Text(Telefonam_peiskirtais_numurs)],
+                    [ps.Text(remontdarbu_sakuma_datums)],
+                    [ps.Text(remontdarbu_beigu_datums)],
 
+                ]
+        window2 = ps.Window('',layout)
+        while True:
+            event,values = window2.read()
+            if event in (ps.WIN_CLOSED,):
+                break
+         
+
+window2.close()  
 window.close()
