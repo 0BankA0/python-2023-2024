@@ -1,4 +1,5 @@
 import PySimpleGUI as ps
+import mysql.connector
 
 class Remontdarbnica():
     # Konstruktora izveide
@@ -72,6 +73,10 @@ while True:
         save = Remontdarbnica(klienta_vards, klienta_uzvards, telefona_numurs, remontdarbu_cena, telefona_modelis, Telefonam_peiskirtais_numurs, remontdarbu_sakuma_datums, remontdarbu_beigu_datums)
         save.Remontdarbu_info()
         save.Remontdarbu_info_print()
+
+        db = mysql.connector.connect(host="localhost",database="new_schema",user="root",password="123123")
+
+        cursor = db.cursor()
     if event == 'Apskatīt datus':
         ps.theme("Black")
         layout = [
