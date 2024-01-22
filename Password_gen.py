@@ -1,3 +1,5 @@
+#Atsauce uz api paroles ģeneratoru https://github.com/fawazsullia/password-generator
+
 import requests #Tiek importēta bibliotēka lai varētu izmantot api
 import json #Tiek importēta json biblieotēka
 
