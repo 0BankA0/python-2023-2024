@@ -32,4 +32,7 @@ password_generator.Paramentri(num='num=true', sim='', caps= '',char=15)
 password_generator.Pass_gen()
 print(password_generator.generated_password)
 
+
+
+
      
