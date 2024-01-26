@@ -1,31 +1,28 @@
-import requests
+import mysql.connector
 
-class PasswordGen:
-    def __init__(self, char, caps, sim):
-        self.caps = caps
-        #self.num = num
-        self.sim = sim
-        self.char = char
-        self.generated_password = None  # Initialize generated_password attribute
+# Replace these with your actual database credentials
+db_config = {
+    'host': '127.0.0.1',
+    'user': 'root',
+    'password': '123123',
+    'database': 'password_generation'
+}
 
-    def set_parameters(self,caps, char, sim):
-        self.caps = caps
-        #self.num = num
-        self.sim = sim
-        self.char = char
+# Establish a connection to the database
+connection = mysql.connector.connect(**db_config)
 
-    def pass_gen(self):
-        url = f"https://passwordinator.onrender.com?num=true{self.sim}{self.caps}&len={self.char}"
-        response = requests.get(url)
-        self.generated_password = response.text  # Store the generated password
-        return self.generated_password
+# Create a cursor object to execute SQL queries
+cursor = connection.cursor()
 
-# Example usage:
-password_generator = PasswordGen(sim='&char=true',caps= '&caps=true',char=12)
-password_generator.pass_gen()  # Generates and stores the password
-print(password_generator.generated_password)  # Access the generated password
+# Example: Execute a simple query to fetch data from the 'user' table
+query = "SELECT * FROM user"
+cursor.execute(query)
 
-# Update parameters and generate a new password
-password_generator.set_parameters(sim='', caps= '',char=15)
-password_generator.pass_gen()
-print(password_generator.generated_password)
+# Fetch and print the results
+result = cursor.fetchall()
+for row in result:
+    print(row)
+
+# Don't forget to close the cursor and connection when you're done
+cursor.close()
+connection.close()

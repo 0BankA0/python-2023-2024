@@ -1,6 +1,8 @@
 #Atsauce uz api paroles ģeneratoru https://github.com/fawazsullia/password-generator
 
 import requests #Tiek importēta bibliotēka lai varētu izmantot api
+import mysql.connector
+
 
 class Password_gen():# Definēta klase Passwrod_gen
     def __init__(self,caps,num,sim,char): # definēti argumenti klases sākuma
@@ -21,7 +23,7 @@ class Password_gen():# Definēta klase Passwrod_gen
         url = f"https://passwordinator.onrender.com?{self.num}&{self.sim}&{self.caps}&len={self.char}" #Mainīgais kura ir url uz api kurš ģenerē paroli
         response = requests.get(url) # mainigais kurš kurā glabajas dati no api
         self.generated_password = response.text #Mainigais no funkcijas __init__ kurā glabājas info no api str formāta
-        
+
 password_generator = Password_gen(num='', sim='char=true',caps= 'caps=true',char=12) #mainigais kurāt tiek ievaditi dati priekš klases objektiem
 password_generator.Pass_gen()  # šeit tiek ģenerēta un glabāta parole
 print(password_generator.generated_password)  # šet ir dota pieeja pie ģenerētas paroles
@@ -33,6 +35,25 @@ password_generator.Pass_gen()
 print(password_generator.generated_password)
 
 
+# savienojums ar datu bāzi
+db_config = {
+    'host': '127.0.0.1',
+    'user': 'root',
+    'password': '123123',
+    'database': 'password_generation'
+}
 
+connection = mysql.connector.connect(**db_config)
 
-     
+cursor = connection.cursor()
+
+query = "SELECT * FROM user"
+cursor.execute(query)
+
+result = cursor.fetchall()
+for row in result:
+    print(row)
+        
+
+cursor.close()
+connection.close()
