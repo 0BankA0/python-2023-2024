@@ -1,28 +1,48 @@
-import mysql.connector
+import tkinter as tk
+from tkinter import filedialog
 
-# Replace these with your actual database credentials
-db_config = {
-    'host': '127.0.0.1',
-    'user': 'root',
-    'password': '123123',
-    'database': 'password_generation'
-}
+class Notepad:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Notepad")
+        self.root.geometry("600x400")
 
-# Establish a connection to the database
-connection = mysql.connector.connect(**db_config)
+        self.text_area = tk.Text(self.root, wrap="word", undo=True)
+        self.text_area.pack(expand="yes", fill="both")
 
-# Create a cursor object to execute SQL queries
-cursor = connection.cursor()
+        self.menu_bar = tk.Menu(self.root)
+        self.root.config(menu=self.menu_bar)
 
-# Example: Execute a simple query to fetch data from the 'user' table
-query = "SELECT * FROM user"
-cursor.execute(query)
+        # File menu
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.file_menu.add_command(label="New", command=self.new_file)
+        self.file_menu.add_command(label="Open", command=self.open_file)
+        self.file_menu.add_command(label="Save", command=self.save_file)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Exit", command=self.root.destroy)
 
-# Fetch and print the results
-result = cursor.fetchall()
-for row in result:
-    print(row)
+    def new_file(self):
+        self.text_area.delete(1.0, tk.END)
 
-# Don't forget to close the cursor and connection when you're done
-cursor.close()
-connection.close()
+    def open_file(self):
+        file_path = filedialog.askopenfilename(defaultextension=".txt",
+                                                 filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+        if file_path:
+            with open(file_path, "r") as file:
+                content = file.read()
+                self.text_area.delete(1.0, tk.END)
+                self.text_area.insert(tk.END, content)
+
+    def save_file(self):
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt",
+                                                   filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+        if file_path:
+            with open(file_path, "w") as file:
+                content = self.text_area.get(1.0, tk.END)
+                file.write(content)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    notepad = Notepad(root)
+    root.mainloop()
