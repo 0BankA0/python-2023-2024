@@ -1,48 +1,71 @@
-import tkinter as tk
-from tkinter import filedialog
+import requests
+from tkinter import BooleanVar
+import customtkinter as tk
 
-class Notepad:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Notepad")
-        self.root.geometry("600x400")
+class Password_gen():
+    def __init__(self, caps, num, sim, char):
+        self.caps = caps
+        self.num = num
+        self.sim = sim
+        self.char = char
+        self.generated_password = None
 
-        self.text_area = tk.Text(self.root, wrap="word", undo=True)
-        self.text_area.pack(expand="yes", fill="both")
+    def generate_password(self):
+        url = f"https://passwordinator.onrender.com?{self.num}&{self.sim}&{self.caps}&len={self.char}"
+        response = requests.get(url)
+        self.generated_password = response.text
+        return self.generated_password
 
-        self.menu_bar = tk.Menu(self.root)
-        self.root.config(menu=self.menu_bar)
+def generate_password_callback():
+    print("Button clicked")
+    caps = "caps=true" if caps_var.get() else ""
+    num = "num=true" if num_var.get() else ""
+    sim = "char=true" if sim_var.get() else ""
+    char = length_entry.get()
+    print(f"caps: {caps}, num: {num}, sim: {sim}, char: {char}")
+    password_generator.caps = caps
+    password_generator.num = num
+    password_generator.sim = sim
+    password_generator.char = char
+    generated_password = password_generator.generate_password()
+    print("Generated password:", generated_password)  # Add this line for debugging
+    password_label.configure(text=generated_password)
 
-        # File menu
-        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
-        self.file_menu.add_command(label="New", command=self.new_file)
-        self.file_menu.add_command(label="Open", command=self.open_file)
-        self.file_menu.add_command(label="Save", command=self.save_file)
-        self.file_menu.add_separator()
-        self.file_menu.add_command(label="Exit", command=self.root.destroy)
 
-    def new_file(self):
-        self.text_area.delete(1.0, tk.END)
+password_generator = Password_gen(False, False, False, 8)
 
-    def open_file(self):
-        file_path = filedialog.askopenfilename(defaultextension=".txt",
-                                                 filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
-        if file_path:
-            with open(file_path, "r") as file:
-                content = file.read()
-                self.text_area.delete(1.0, tk.END)
-                self.text_area.insert(tk.END, content)
+tk.set_appearance_mode("dark")
+tk.set_default_color_theme("dark-blue")
 
-    def save_file(self):
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt",
-                                                   filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
-        if file_path:
-            with open(file_path, "w") as file:
-                content = self.text_area.get(1.0, tk.END)
-                file.write(content)
+root = tk.CTk()
+root.title('Password generator')
+root.geometry("1200x600")
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    notepad = Notepad(root)
-    root.mainloop()
+tabview = tk.CTkTabview(root)
+tabview.pack(padx=20, pady=10 , fill="both", expand=True)
+
+tab_1 = tabview.add("Generate password")
+tabview.set("Generate password")
+
+caps_var = BooleanVar()
+caps_checkbox = tk.CTkCheckBox(tab_1, text="Caps", variable=caps_var, width=900)
+caps_checkbox.pack(pady=20)
+
+sim_var = BooleanVar()
+sim_checkbox = tk.CTkCheckBox(tab_1, text="Symbol", variable=sim_var, width=900)
+sim_checkbox.pack(pady=20)
+
+num_var = BooleanVar()
+num_checkbox = tk.CTkCheckBox(tab_1, text="Numbers", variable=num_var, width=900)
+num_checkbox.pack(pady=20)
+
+length_entry = tk.CTkEntry(tab_1, placeholder_text="Password length", width=200)
+length_entry.place(x=120, y=325)
+
+generate_button = tk.CTkButton(tab_1, text='Generate password', font=('', 20), height=100, width=200, command=generate_password_callback)
+generate_button.pack(pady=100)
+
+password_label = tk.CTkLabel(tab_1, text='', width=900)
+password_label.pack(pady=20)
+
+root.mainloop()
