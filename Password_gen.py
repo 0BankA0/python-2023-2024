@@ -23,13 +23,13 @@ def frame(generated_password, log): # tiek izveoidota funkcija kurai ir nefiecie
 
     root2 = tk.CTk() # manigais kura glaabājas tk.CTk()
     root2.title('Password')# tiek pieškirts nosaukums logam
-    root2.geometry("400x200") #tiek norādīts izmērs logam
+    root2.geometry() #tiek norādīts izmērs logam
     
-    labvl2 = tk.CTkLabel(root2,text=log,font=('',22)) #tiek izveidots teks kura tiek parādita informācija no loga login
-    labvl2.pack(pady= 30) # tiek norādītas īpašības priekšobjecta dizaina
+    labvl2 = tk.CTkLabel(root2,text=f"Login: {log}",font=('',22)) #tiek izveidots teks kura tiek parādita informācija no loga login
+    labvl2.pack(pady= 30, expand=True) # tiek norādītas īpašības priekšobjecta dizaina
 
     labvl = tk.CTkLabel(root2,text=generated_password,font=('',22)) #tiek izveidots teks (parole)
-    labvl.pack(pady= 30)# tiek norādītas īpašības priekšobjecta dizaina
+    labvl.pack(pady= 30,expand=True)# tiek norādītas īpašības priekšobjecta dizaina
 
     root2.mainloop() #palaiž gui šaja funkcija
 
