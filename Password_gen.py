@@ -31,6 +31,12 @@ def frame(generated_password, log): # tiek izveoidota funkcija kurai ir nefiecie
     labvl = tk.CTkLabel(root2,text=generated_password,font=('',22)) #tiek izveidots teks (parole)
     labvl.pack(pady= 30,expand=True)# tiek norādītas īpašības priekšobjecta dizaina
 
+    button = tk.CTkButton(root2, text="Save", font=('', 20),command=savedata) #tiek izveidota poga kura aizsūta visas vērtības uz funkciju generate_password
+    button.pack(pady=20, padx=30)
+
+    button4 = tk.CTkButton(root2, text="exit",  font=('', 20),command=root2.destroy) #tiek izveidota poga kura aizsūta visas vērtības uz funkciju generate_password
+    button4.pack(pady=20, padx=30)
+
     root2.mainloop() #palaiž gui šaja funkcija
 
 def generate_password():
@@ -45,6 +51,30 @@ def generate_password():
     print(password_generator.generated_password) # šet ir dota pieeja pie ģenerētas paroles
     generated_password = password_generator.generated_password # tiek izveidots mainigais kura tiek glabāta parole
     frame(generated_password, log) #maniegie no šis funkcijas ir savienoti ar funkciju frame
+    savedata(generated_password, log)
+
+def savedata(generated_password, log):
+    
+    db_config = {
+        'host': '127.0.0.1',
+        'user': 'root',
+        'password': '123123',
+        'database': 'password_generation'
+    }
+
+    connection = mysql.connector.connect(**db_config)
+
+    cursor = connection.cursor()
+    
+    info = (generated_password, log)
+
+    query = f"IMPORT INTO password_generation.generated_passwords values(1,1,{generated_password},{log},)"
+    cursor.execute(query)
+    
+    cursor.close()
+    connection.close()
+
+
 
 
 
@@ -83,7 +113,7 @@ button.pack(pady=20, padx=30) # tiek pieškirtas īpašibas objetam dizaina
 
 root.mainloop()#tiek palaista koda daļa kur atiecas uz gui
 
-# # savienojums ar datu bāzi
+ # savienojums ar datu bāzi
 # db_config = {
 #     'host': '127.0.0.1',
 #     'user': 'root',
@@ -101,6 +131,11 @@ root.mainloop()#tiek palaista koda daļa kur atiecas uz gui
 # result = cursor.fetchall()
 # for row in result:
 #     print(row)
+        
+
+# cursor.close()
+# connection.close()
+
         
 
 # cursor.close()
