@@ -31,7 +31,70 @@ def frame(generated_password, log): # tiek izveoidota funkcija kurai ir nefiecie
     labvl = tk.CTkLabel(root2,text=generated_password,font=('',22)) #tiek izveidots teks (parole)
     labvl.pack(pady= 30,expand=True)# tiek norādītas īpašības priekšobjecta dizaina
 
+    button = tk.CTkButton(root2, text="Save", font=('', 20),command=lambda: savedata(generated_password, log)) #tiek izveidota poga kura aizsūta visas vērtības uz funkciju generate_password
+    button.pack(pady=20, padx=30)
+
+    button4 = tk.CTkButton(root2, text="exit",  font=('', 20),command=root2.destroy) #tiek izveidota poga kura aizsūta visas vērtības uz funkciju generate_password
+    button4.pack(pady=20, padx=30)
+
     root2.mainloop() #palaiž gui šaja funkcija
+    
+def savedata(generated_password, log):
+    db_config = {
+        'host': '127.0.0.1',
+        'user': 'root',
+        'password': '123123',
+        'database': 'password_generation'
+    }
+
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+    
+    info = (generated_password, log)
+    query = "INSERT INTO generated_passwords (password, login) VALUES (%s, %s)"
+    cursor.execute(query, info)
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+def showpass():
+    db_config = {
+        'host': '127.0.0.1',
+        'user': 'root',
+        'password': '123123',
+        'database': 'password_generation'
+    }
+
+    connection = mysql.connector.connect(**db_config)
+
+    cursor = connection.cursor()
+
+    query = "SELECT login, password FROM generated_passwords"
+    cursor.execute(query)
+
+    result = cursor.fetchall()
+
+    showdata = []
+    for row in result:
+        showdata.append(row)
+            
+
+    cursor.close()
+    connection.close()
+
+    tk.set_appearance_mode("dark") #tiek norādīta galvēnā krāsa prieš gui
+    tk.set_default_color_theme("dark-blue") #tiek norādīta otra krāsa prieš gui
+
+    root3 = tk.CTk() # manigais kura glaabājas tk.CTk()
+    root3.title('Data')# tiek pieškirts nosaukums logam
+    root3.geometry() #tiek norādīts izmērs logam
+    for login, password in showdata:
+        labv = tk.CTkLabel(root3,text=f"Login: {login}, {password}",font=('',22)) #tiek izveidots teks kura tiek parādita informācija no loga login
+        labv.pack(pady= 30, expand=True) # tiek norādītas īpašības priekšobjecta dizaina
+
+    root3.mainloop()
 
 def generate_password():
     caps = "1" if checkbox1.get() else "0" #tiek saņemta vieniba no checkbox kur ja vienība 1 tad tā bus vienada ar mainīgo else ši vienība būs 0
@@ -45,7 +108,6 @@ def generate_password():
     print(password_generator.generated_password) # šet ir dota pieeja pie ģenerētas paroles
     generated_password = password_generator.generated_password # tiek izveidots mainigais kura tiek glabāta parole
     frame(generated_password, log) #maniegie no šis funkcijas ir savienoti ar funkciju frame
-
 
 
 #dizains aplikācijai
@@ -81,29 +143,7 @@ entry2.pack(pady=40) # tiek pieškirtas īpašibas objetam dizaina
 button = tk.CTkButton(tab_1, text="Generate password", font=('', 20), width=1000, height=50, command=generate_password) #tiek izveidota poga kura aizsūta visas vērtības uz funkciju generate_password
 button.pack(pady=20, padx=30) # tiek pieškirtas īpašibas objetam dizaina
 
+Button2= tk.CTkButton(tab_2, text="Show Data", font=('', 20), width=900, height=200, command=showpass)
+Button2.pack(pady=200, padx=30)
+
 root.mainloop()#tiek palaista koda daļa kur atiecas uz gui
-
-# # savienojums ar datu bāzi
-# db_config = {
-#     'host': '127.0.0.1',
-#     'user': 'root',
-#     'password': '123123',
-#     'database': 'password_generation'
-# }
-
-# connection = mysql.connector.connect(**db_config)
-
-# cursor = connection.cursor()
-
-# query = "SELECT * FROM user"
-# cursor.execute(query)
-
-# result = cursor.fetchall()
-# for row in result:
-#     print(row)
-        
-
-# cursor.close()
-# connection.close()
-
-
