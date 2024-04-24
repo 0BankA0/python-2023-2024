@@ -75,8 +75,10 @@ def showpass():
     cursor.execute(query)
 
     result = cursor.fetchall()
+
+    showdata = []
     for row in result:
-        showdata = row
+        showdata.append(row)
             
 
     cursor.close()
@@ -88,9 +90,9 @@ def showpass():
     root3 = tk.CTk() # manigais kura glaabājas tk.CTk()
     root3.title('Data')# tiek pieškirts nosaukums logam
     root3.geometry() #tiek norādīts izmērs logam
-
-    labv = tk.CTkLabel(root3,text=f"Passwords: {showdata}",font=('',22)) #tiek izveidots teks kura tiek parādita informācija no loga login
-    labv.pack(pady= 30, expand=True) # tiek norādītas īpašības priekšobjecta dizaina
+    for login, password in showdata:
+        labv = tk.CTkLabel(root3,text=f"Login: {login}, {password}",font=('',22)) #tiek izveidots teks kura tiek parādita informācija no loga login
+        labv.pack(pady= 30, expand=True) # tiek norādītas īpašības priekšobjecta dizaina
 
     root3.mainloop()
 
